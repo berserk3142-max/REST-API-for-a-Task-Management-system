@@ -1,10 +1,10 @@
-# 📋 API Response Sheet - Task Management System
+# API Response Sheet - Task Management System
 
 > **Complete API Documentation with Request/Response Examples**
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Base Information](#base-information)
 2. [Authentication](#authentication)
@@ -17,7 +17,7 @@
 
 ---
 
-## 🌐 Base Information
+## Base Information
 
 | Property | Value |
 |----------|-------|
@@ -27,7 +27,7 @@
 
 ---
 
-## 🔐 Authentication
+## Authentication
 
 This API uses **API Key Authentication** via the `X-API-KEY` header.
 
@@ -50,7 +50,7 @@ curl -X GET "https://your-app.onrender.com/api/tasks" \
 
 ---
 
-## 👤 User API Endpoints
+## User API Endpoints
 
 ### 1. Create User
 
@@ -71,8 +71,8 @@ curl -X GET "https://your-app.onrender.com/api/tasks" \
 
 | Field | Type | Required | Validation | Description |
 |-------|------|----------|------------|-------------|
-| `name` | String | ✅ Yes | Min 2 characters | User's full name |
-| `email` | String | ✅ Yes | Valid email format | User's email address (must be unique) |
+| `name` | String | Yes | Min 2 characters | User's full name |
+| `email` | String | Yes | Valid email format | User's email address (must be unique) |
 
 #### Success Response
 
@@ -217,7 +217,7 @@ GET /api/users?page=0&size=10&sort=name,asc
 
 ---
 
-## 📝 Task API Endpoints
+## Task API Endpoints
 
 ### 1. Create Task
 
@@ -242,12 +242,12 @@ GET /api/users?page=0&size=10&sort=name,asc
 
 | Field | Type | Required | Validation | Description |
 |-------|------|----------|------------|-------------|
-| `title` | String | ✅ Yes | 3-100 characters | Task title |
-| `description` | String | ❌ No | Max 500 characters | Detailed description |
-| `status` | Enum | ❌ No | `TODO`, `IN_PROGRESS`, `DONE` | Task status (default: `TODO`) |
-| `priority` | Enum | ❌ No | `LOW`, `MEDIUM`, `HIGH` | Priority level (default: `MEDIUM`) |
-| `dueDate` | Date | ❌ No | Format: `YYYY-MM-DD` | Task due date |
-| `assignedToId` | Long | ❌ No | Valid user ID | User to assign the task to |
+| `title` | String | Yes | 3-100 characters | Task title |
+| `description` | String | No | Max 500 characters | Detailed description |
+| `status` | Enum | No | `TODO`, `IN_PROGRESS`, `DONE` | Task status (default: `TODO`) |
+| `priority` | Enum | No | `LOW`, `MEDIUM`, `HIGH` | Priority level (default: `MEDIUM`) |
+| `dueDate` | Date | No | Format: `YYYY-MM-DD` | Task due date |
+| `assignedToId` | Long | No | Valid user ID | User to assign the task to |
 
 #### Success Response
 
@@ -469,12 +469,12 @@ GET /api/tasks?page=0&size=5&sort=createdAt,desc
 
 | Field | Type | Required | Validation | Description |
 |-------|------|----------|------------|-------------|
-| `title` | String | ✅ Yes | 3-100 characters | Task title |
-| `description` | String | ❌ No | Max 500 characters | Detailed description |
-| `status` | Enum | ❌ No | `TODO`, `IN_PROGRESS`, `DONE` | Task status |
-| `priority` | Enum | ❌ No | `LOW`, `MEDIUM`, `HIGH` | Priority level |
-| `dueDate` | Date | ❌ No | Format: `YYYY-MM-DD` | Task due date |
-| `assignedToId` | Long | ❌ No | Valid user ID | User to assign the task to |
+| `title` | String | Yes | 3-100 characters | Task title |
+| `description` | String | No | Max 500 characters | Detailed description |
+| `status` | Enum | No | `TODO`, `IN_PROGRESS`, `DONE` | Task status |
+| `priority` | Enum | No | `LOW`, `MEDIUM`, `HIGH` | Priority level |
+| `dueDate` | Date | No | Format: `YYYY-MM-DD` | Task due date |
+| `assignedToId` | Long | No | Valid user ID | User to assign the task to |
 
 #### Success Response
 
@@ -524,7 +524,7 @@ GET /api/tasks?page=0&size=5&sort=createdAt,desc
 
 | Field | Type | Required | Validation | Description |
 |-------|------|----------|------------|-------------|
-| `status` | Enum | ✅ Yes | `TODO`, `IN_PROGRESS`, `DONE` | New task status |
+| `status` | Enum | Yes | `TODO`, `IN_PROGRESS`, `DONE` | New task status |
 
 #### Success Response
 
@@ -598,7 +598,7 @@ GET /api/tasks?page=0&size=5&sort=createdAt,desc
 
 ---
 
-## 📊 Data Models
+## Data Models
 
 ### UserResponse
 
@@ -644,7 +644,7 @@ GET /api/tasks?page=0&size=5&sort=createdAt,desc
 
 ---
 
-## ❌ Error Responses
+## Error Responses
 
 ### Standard Error Response
 
@@ -685,7 +685,7 @@ GET /api/tasks?page=0&size=5&sort=createdAt,desc
 
 ---
 
-## 📈 HTTP Status Codes
+## HTTP Status Codes
 
 | Code | Status | Description |
 |------|--------|-------------|
@@ -701,7 +701,7 @@ GET /api/tasks?page=0&size=5&sort=createdAt,desc
 
 ---
 
-## 📄 Pagination
+## Pagination
 
 All list endpoints return paginated responses using Spring's `Page` object.
 
@@ -757,7 +757,7 @@ All list endpoints return paginated responses using Spring's `Page` object.
 
 ---
 
-## 🧪 cURL Examples
+## cURL Examples
 
 ### Create a User
 
@@ -812,7 +812,7 @@ curl -X DELETE "http://localhost:8080/api/tasks/1" \
 
 ---
 
-## 📌 Quick Reference Card
+## Quick Reference Card
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
