@@ -32,3 +32,4 @@ server:
 api:
   security:
     key: taskmanager-secret-api-key-2024
+    enabled: false  # Set to true to enable API key authentication
