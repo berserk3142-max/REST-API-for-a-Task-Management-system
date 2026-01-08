@@ -18,12 +18,21 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     @Value("${api.security.key}")
     private String apiKey;
 
+    @Value("${api.security.enabled:true}")
+    private boolean securityEnabled;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
+
+        // Skip API key check if security is disabled (for development/testing)
+        if (!securityEnabled) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (path.equals("/h2-console") || path.startsWith("/h2-console/")) {
             filterChain.doFilter(request, response);

@@ -425,6 +425,161 @@ java -jar target/task-manager-1.0.0.jar
 
 ---
 
+## Quick Start Testing Guide
+
+> **⚠️ Important**: All API endpoints require the `X-API-KEY` header. Browsers cannot send custom headers, so use one of the methods below.
+
+### API Key Information
+
+| Key | Value |
+|-----|-------|
+| **Header Name** | `X-API-KEY` |
+| **Header Value** | `taskmanager-secret-api-key-2024` |
+
+---
+
+### Method 1: PowerShell (Windows - Recommended)
+
+#### Get All Users
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/users" -Method GET -Headers @{"X-API-KEY"="taskmanager-secret-api-key-2024"} | ConvertTo-Json
+```
+
+#### Get All Tasks
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/tasks" -Method GET -Headers @{"X-API-KEY"="taskmanager-secret-api-key-2024"} | ConvertTo-Json -Depth 5
+```
+
+#### Create a User
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/users" -Method POST -ContentType "application/json" -Headers @{"X-API-KEY"="taskmanager-secret-api-key-2024"} -Body '{"name": "John Doe", "email": "john@example.com"}' | ConvertTo-Json
+```
+
+#### Create a Task
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/tasks" -Method POST -ContentType "application/json" -Headers @{"X-API-KEY"="taskmanager-secret-api-key-2024"} -Body '{"title": "My Task", "description": "Task description", "status": "TODO", "priority": "HIGH", "dueDate": "2026-12-31", "assignedToId": 1}' | ConvertTo-Json -Depth 3
+```
+
+#### Update Task Status
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/tasks/1/status" -Method PATCH -ContentType "application/json" -Headers @{"X-API-KEY"="taskmanager-secret-api-key-2024"} -Body '{"status": "IN_PROGRESS"}' | ConvertTo-Json -Depth 3
+```
+
+#### Delete a Task
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/tasks/1" -Method DELETE -Headers @{"X-API-KEY"="taskmanager-secret-api-key-2024"}
+```
+
+#### Filter Tasks by Priority
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/tasks?priority=HIGH" -Method GET -Headers @{"X-API-KEY"="taskmanager-secret-api-key-2024"} | ConvertTo-Json -Depth 5
+```
+
+#### Filter Tasks by Status
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/tasks?status=TODO" -Method GET -Headers @{"X-API-KEY"="taskmanager-secret-api-key-2024"} | ConvertTo-Json -Depth 5
+```
+
+---
+
+### Method 2: H2 Database Console (No API Key Required)
+
+Access the database directly without API key:
+
+1. **Open Browser**: http://localhost:8080/h2-console
+2. **Login Credentials**:
+   - JDBC URL: `jdbc:h2:mem:taskdb`
+   - Username: `sa`
+   - Password: *(leave empty)*
+3. **Run SQL Queries**:
+```sql
+-- View all users
+SELECT * FROM USERS;
+
+-- View all tasks
+SELECT * FROM TASKS;
+
+-- View tasks with user details
+SELECT t.*, u.name as user_name, u.email 
+FROM TASKS t 
+LEFT JOIN USERS u ON t.assigned_to = u.id;
+```
+
+---
+
+### Method 3: Postman / Thunder Client
+
+1. **Download**: [Postman](https://www.postman.com/downloads/) or use Thunder Client VS Code extension
+2. **Add Header** to all requests:
+   - Header Name: `X-API-KEY`
+   - Header Value: `taskmanager-secret-api-key-2024`
+3. **Set Content-Type** for POST/PUT/PATCH:
+   - `Content-Type: application/json`
+
+---
+
+### Complete API Endpoints Reference
+
+#### Users API
+
+| Method | URL | Description | Body (JSON) |
+|--------|-----|-------------|-------------|
+| `GET` | http://localhost:8080/api/users | List all users | - |
+| `GET` | http://localhost:8080/api/users/{id} | Get user by ID | - |
+| `POST` | http://localhost:8080/api/users | Create new user | `{"name": "...", "email": "..."}` |
+
+#### Tasks API
+
+| Method | URL | Description | Body (JSON) |
+|--------|-----|-------------|-------------|
+| `GET` | http://localhost:8080/api/tasks | List all tasks | - |
+| `GET` | http://localhost:8080/api/tasks/{id} | Get task by ID | - |
+| `POST` | http://localhost:8080/api/tasks | Create new task | See below |
+| `PUT` | http://localhost:8080/api/tasks/{id} | Full update task | See below |
+| `PATCH` | http://localhost:8080/api/tasks/{id}/status | Update status only | `{"status": "TODO\|IN_PROGRESS\|DONE"}` |
+| `DELETE` | http://localhost:8080/api/tasks/{id} | Delete task | - |
+
+#### Task Filter Parameters (GET /api/tasks)
+
+| Parameter | Values | Example |
+|-----------|--------|---------|
+| `status` | `TODO`, `IN_PROGRESS`, `DONE` | `?status=TODO` |
+| `priority` | `LOW`, `MEDIUM`, `HIGH` | `?priority=HIGH` |
+| `assignedToId` | User ID (number) | `?assignedToId=1` |
+| `page` | Page number (0-based) | `?page=0` |
+| `size` | Items per page | `?size=10` |
+
+#### Sample Request Bodies
+
+**Create/Update Task:**
+```json
+{
+  "title": "Task Title",
+  "description": "Task Description",
+  "status": "TODO",
+  "priority": "HIGH",
+  "dueDate": "2026-12-31",
+  "assignedToId": 1
+}
+```
+
+**Create User:**
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+```
+
+**Update Status:**
+```json
+{
+  "status": "IN_PROGRESS"
+}
+```
+
+---
+
 ## Sample Requests
 
 ### Create User
