@@ -27,9 +27,9 @@ spring:
     locations: classpath:db/migration
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 api:
   security:
-    key: taskmanager-secret-api-key-2024
-    enabled: false  # Set to true to enable API key authentication
+    key: ${API_KEY:taskmanager-secret-api-key-2024}
+    enabled: ${API_SECURITY_ENABLED:true}
