@@ -1,10 +1,10 @@
 # Task Management REST API
 
-A professional REST API for Task Management built with **Spring Boot 3.2**, **JPA/Hibernate**, and **H2 Database**.
+A professional REST API for Task Management built with Spring Boot 3.2, JPA/Hibernate, and H2 Database.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Tech Stack](#tech-stack)
 - [Architecture Overview](#architecture-overview)
@@ -20,49 +20,49 @@ A professional REST API for Task Management built with **Spring Boot 3.2**, **JP
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Technology | Purpose |
 |------------|---------|
 | Java 17 | Programming Language |
 | Spring Boot 3.2.0 | Application Framework |
 | Spring Data JPA | Database Access Layer |
-| H2 Database | In-memory Database (Dev) |
+| H2 Database | In-memory Database |
 | Flyway | Database Migrations |
 | Lombok | Boilerplate Reduction |
 | Maven | Build Tool |
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 ```mermaid
 flowchart TB
-    subgraph Client["🌐 Client Layer"]
-        HTTP["HTTP Request"]
+    subgraph Client
+        HTTP[HTTP Request]
     end
 
-    subgraph Security["🔐 Security Layer"]
-        Filter["ApiKeyFilter"]
+    subgraph Security
+        Filter[ApiKeyFilter]
     end
 
-    subgraph API["📡 API Layer"]
-        UC["UserController"]
-        TC["TaskController"]
+    subgraph API
+        UC[UserController]
+        TC[TaskController]
     end
 
-    subgraph Business["⚙️ Business Layer"]
-        US["UserService"]
-        TS["TaskService"]
+    subgraph Business
+        US[UserService]
+        TS[TaskService]
     end
 
-    subgraph Data["💾 Data Layer"]
-        UR["UserRepository"]
-        TR["TaskRepository"]
+    subgraph Data
+        UR[UserRepository]
+        TR[TaskRepository]
     end
 
-    subgraph Database["🗄️ Database"]
-        DB[("H2 Database")]
+    subgraph Database
+        DB[(H2 Database)]
     end
 
     HTTP --> Filter
@@ -81,15 +81,15 @@ flowchart TB
 
 | Layer | Components | Responsibility |
 |-------|------------|----------------|
-| **Security** | ApiKeyFilter | Validates X-API-KEY header |
-| **Controller** | UserController, TaskController | HTTP request/response handling |
-| **Service** | UserService, TaskService | Business logic & validation |
-| **Repository** | UserRepository, TaskRepository | Database operations |
-| **Entity** | User, Task | Data models |
+| Security | ApiKeyFilter | Validates X-API-KEY header |
+| Controller | UserController, TaskController | HTTP request/response handling |
+| Service | UserService, TaskService | Business logic and validation |
+| Repository | UserRepository, TaskRepository | Database operations |
+| Entity | User, Task | Data models |
 
 ---
 
-## ⚡ How It Works
+## How It Works
 
 ### Request Lifecycle
 
@@ -108,7 +108,7 @@ sequenceDiagram
         F-->>C: 401 Unauthorized
     else Valid API Key
         F->>Ctrl: Forward Request
-        Ctrl->>Ctrl: Validate @RequestBody
+        Ctrl->>Ctrl: Validate RequestBody
         
         alt Validation Failed
             Ctrl-->>C: 400 Bad Request
@@ -119,7 +119,7 @@ sequenceDiagram
             DB-->>R: Result Set
             R-->>S: Entity/Page
             S-->>Ctrl: DTO Response
-            Ctrl-->>C: HTTP Response (JSON)
+            Ctrl-->>C: HTTP Response JSON
         end
     end
 ```
@@ -128,28 +128,28 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    subgraph Request["📥 Incoming Request"]
-        JSON["JSON Body"]
-        Headers["Headers (X-API-KEY)"]
+    subgraph Request
+        JSON[JSON Body]
+        Headers[Headers X-API-KEY]
     end
 
-    subgraph Validation["✅ Validation"]
-        DTO["DTO with @Valid"]
-        Anno["@NotBlank, @Size, @Email"]
+    subgraph Validation
+        DTO[DTO with Valid]
+        Anno[NotBlank Size Email]
     end
 
-    subgraph Processing["⚙️ Processing"]
-        Entity["Entity Creation"]
-        Logic["Business Logic"]
+    subgraph Processing
+        Entity[Entity Creation]
+        Logic[Business Logic]
     end
 
-    subgraph Response["📤 Response"]
-        ResDTO["Response DTO"]
-        ResJSON["JSON Response"]
+    subgraph Response
+        ResDTO[Response DTO]
+        ResJSON[JSON Response]
     end
 
     JSON --> DTO
-    Headers --> Filter["ApiKeyFilter"]
+    Headers --> Filter[ApiKeyFilter]
     DTO --> Anno
     Anno --> Entity
     Entity --> Logic
@@ -159,174 +159,174 @@ flowchart LR
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/main/java/com/taskmanager/
-├── TaskManagerApplication.java     # Main entry point
+├── TaskManagerApplication.java
 │
 ├── config/
-│   ├── ApiKeyFilter.java          # X-API-KEY validation filter
-│   └── SecurityConfig.java        # Filter registration
+│   ├── ApiKeyFilter.java
+│   └── SecurityConfig.java
 │
 ├── controller/
-│   ├── UserController.java        # /api/users endpoints
-│   └── TaskController.java        # /api/tasks endpoints
+│   ├── UserController.java
+│   └── TaskController.java
 │
 ├── dto/
 │   ├── user/
-│   │   ├── CreateUserRequest.java # Input DTO for creating user
-│   │   └── UserResponse.java      # Output DTO for user data
+│   │   ├── CreateUserRequest.java
+│   │   └── UserResponse.java
 │   └── task/
-│       ├── CreateTaskRequest.java # Input DTO for creating task
-│       ├── UpdateTaskRequest.java # Input DTO for updating task
-│       ├── UpdateStatusRequest.java # Input DTO for status update
-│       └── TaskResponse.java      # Output DTO for task data
+│       ├── CreateTaskRequest.java
+│       ├── UpdateTaskRequest.java
+│       ├── UpdateStatusRequest.java
+│       └── TaskResponse.java
 │
 ├── entity/
-│   ├── User.java                  # User JPA entity
-│   └── Task.java                  # Task JPA entity
+│   ├── User.java
+│   └── Task.java
 │
 ├── enums/
-│   ├── TaskStatus.java            # TODO, IN_PROGRESS, DONE
-│   └── TaskPriority.java          # LOW, MEDIUM, HIGH
+│   ├── TaskStatus.java
+│   └── TaskPriority.java
 │
 ├── exception/
-│   ├── ResourceNotFoundException.java  # 404 errors
-│   ├── ConflictException.java          # 409 errors
-│   ├── ErrorResponse.java              # Error response structure
-│   └── GlobalExceptionHandler.java     # Central exception handler
+│   ├── ResourceNotFoundException.java
+│   ├── ConflictException.java
+│   ├── ErrorResponse.java
+│   └── GlobalExceptionHandler.java
 │
 ├── repository/
-│   ├── UserRepository.java        # User database operations
-│   └── TaskRepository.java        # Task database operations
+│   ├── UserRepository.java
+│   └── TaskRepository.java
 │
 └── service/
-    ├── UserService.java           # User business logic
-    └── TaskService.java           # Task business logic
+    ├── UserService.java
+    └── TaskService.java
 ```
 
 ---
 
-## 🗄️ Database Schema
+## Database Schema
 
 ```mermaid
 erDiagram
     USERS {
-        bigint id PK "AUTO_INCREMENT"
-        varchar name "NOT NULL, max 100"
-        varchar email "NOT NULL, UNIQUE, max 255"
+        bigint id PK
+        varchar name
+        varchar email
     }
     
     TASKS {
-        bigint id PK "AUTO_INCREMENT"
-        varchar title "NOT NULL, max 100"
-        varchar description "max 500"
-        varchar status "TODO, IN_PROGRESS, DONE"
-        varchar priority "LOW, MEDIUM, HIGH"
-        date due_date "nullable"
-        timestamp created_at "NOT NULL"
-        timestamp updated_at "NOT NULL"
-        bigint assigned_to FK "nullable"
+        bigint id PK
+        varchar title
+        varchar description
+        varchar status
+        varchar priority
+        date due_date
+        timestamp created_at
+        timestamp updated_at
+        bigint assigned_to FK
     }
     
-    USERS ||--o{ TASKS : "assigned_to"
+    USERS ||--o{ TASKS : assigned_to
 ```
 
 ### Migrations
 
 | Version | File | Description |
 |---------|------|-------------|
-| V1 | `V1__create_users_table.sql` | Creates users table |
-| V2 | `V2__create_tasks_table.sql` | Creates tasks table with FK |
+| V1 | V1__create_users_table.sql | Creates users table |
+| V2 | V2__create_tasks_table.sql | Creates tasks table with FK |
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### User Endpoints
 
 ```mermaid
 flowchart LR
-    subgraph Users["/api/users"]
-        POST_U["POST /"] --> CreateUser["Create User"]
-        GET_U["GET /"] --> ListUsers["List Users (Paginated)"]
-        GET_UID["GET /{id}"] --> GetUser["Get User by ID"]
+    subgraph Users
+        POST_U[POST /] --> CreateUser[Create User]
+        GET_U[GET /] --> ListUsers[List Users]
+        GET_UID[GET /id] --> GetUser[Get User by ID]
     end
 ```
 
 | Method | Endpoint | Description | Status Codes |
 |--------|----------|-------------|--------------|
-| POST | `/api/users` | Create a new user | 201, 400, 409 |
-| GET | `/api/users` | List all users (paginated) | 200 |
-| GET | `/api/users/{id}` | Get user by ID | 200, 404 |
+| POST | /api/users | Create a new user | 201, 400, 409 |
+| GET | /api/users | List all users paginated | 200 |
+| GET | /api/users/{id} | Get user by ID | 200, 404 |
 
 ### Task Endpoints
 
 ```mermaid
 flowchart LR
-    subgraph Tasks["/api/tasks"]
-        POST_T["POST /"] --> CreateTask["Create Task"]
-        GET_T["GET /"] --> ListTasks["List Tasks (Filtered)"]
-        GET_TID["GET /{id}"] --> GetTask["Get Task"]
-        PUT_T["PUT /{id}"] --> UpdateTask["Update Task"]
-        PATCH_T["PATCH /{id}/status"] --> UpdateStatus["Update Status"]
-        DELETE_T["DELETE /{id}"] --> DeleteTask["Delete Task"]
+    subgraph Tasks
+        POST_T[POST /] --> CreateTask[Create Task]
+        GET_T[GET /] --> ListTasks[List Tasks]
+        GET_TID[GET /id] --> GetTask[Get Task]
+        PUT_T[PUT /id] --> UpdateTask[Update Task]
+        PATCH_T[PATCH /id/status] --> UpdateStatus[Update Status]
+        DELETE_T[DELETE /id] --> DeleteTask[Delete Task]
     end
 ```
 
 | Method | Endpoint | Description | Status Codes |
 |--------|----------|-------------|--------------|
-| POST | `/api/tasks` | Create a new task | 201, 400, 404 |
-| GET | `/api/tasks` | List tasks with filters | 200 |
-| GET | `/api/tasks/{id}` | Get task by ID | 200, 404 |
-| PUT | `/api/tasks/{id}` | Full update of task | 200, 400, 404 |
-| PATCH | `/api/tasks/{id}/status` | Update status only | 200, 400, 404 |
-| DELETE | `/api/tasks/{id}` | Delete task | 204, 404 |
+| POST | /api/tasks | Create a new task | 201, 400, 404 |
+| GET | /api/tasks | List tasks with filters | 200 |
+| GET | /api/tasks/{id} | Get task by ID | 200, 404 |
+| PUT | /api/tasks/{id} | Full update of task | 200, 400, 404 |
+| PATCH | /api/tasks/{id}/status | Update status only | 200, 400, 404 |
+| DELETE | /api/tasks/{id} | Delete task | 204, 404 |
 
 ### Query Parameters for GET /api/tasks
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `status` | String | Filter by status (TODO, IN_PROGRESS, DONE) |
-| `priority` | String | Filter by priority (LOW, MEDIUM, HIGH) |
-| `assignedToId` | Long | Filter by assigned user ID |
-| `page` | Integer | Page number (default: 0) |
-| `size` | Integer | Page size (default: 10) |
-| `sort` | String | Sort field (default: createdAt) |
+| status | String | Filter by status TODO IN_PROGRESS DONE |
+| priority | String | Filter by priority LOW MEDIUM HIGH |
+| assignedToId | Long | Filter by assigned user ID |
+| page | Integer | Page number default 0 |
+| size | Integer | Page size default 10 |
+| sort | String | Sort field default createdAt |
 
 ---
 
-## 🔒 Authentication
+## Authentication
 
 ### API Key Flow
 
 ```mermaid
 flowchart TD
-    A["Incoming Request"] --> B{"Has X-API-KEY header?"}
-    B -->|No| C["401 Unauthorized<br/>Missing API key"]
-    B -->|Yes| D{"Key matches config?"}
-    D -->|No| E["401 Unauthorized<br/>Invalid API key"]
-    D -->|Yes| F["Continue to Controller"]
+    A[Incoming Request] --> B{Has X-API-KEY header}
+    B -->|No| C[401 Unauthorized Missing API key]
+    B -->|Yes| D{Key matches config}
+    D -->|No| E[401 Unauthorized Invalid API key]
+    D -->|Yes| F[Continue to Controller]
     
     style C fill:#ff6b6b
     style E fill:#ff6b6b
     style F fill:#51cf66
 ```
 
-**API Key**: `taskmanager-secret-api-key-2024`
+API Key: `taskmanager-secret-api-key-2024`
 
-**Header Format**:
+Header Format:
 ```
 X-API-KEY: taskmanager-secret-api-key-2024
 ```
 
 ### Excluded Paths
-- `/h2-console/**` - H2 Database Console (for development)
+- /h2-console/** - H2 Database Console
 
 ---
 
-## ⚠️ Error Handling
+## Error Handling
 
 ### Error Response Structure
 
@@ -344,18 +344,18 @@ X-API-KEY: taskmanager-secret-api-key-2024
 
 ```mermaid
 flowchart TD
-    E["Exception Thrown"] --> GEH["GlobalExceptionHandler"]
+    E[Exception Thrown] --> GEH[GlobalExceptionHandler]
     
-    GEH --> RNF{"ResourceNotFoundException?"}
-    RNF -->|Yes| R404["404 Not Found"]
+    GEH --> RNF{ResourceNotFoundException}
+    RNF -->|Yes| R404[404 Not Found]
     
-    RNF -->|No| CE{"ConflictException?"}
-    CE -->|Yes| R409["409 Conflict"]
+    RNF -->|No| CE{ConflictException}
+    CE -->|Yes| R409[409 Conflict]
     
-    CE -->|No| VE{"Validation Error?"}
-    VE -->|Yes| R400["400 Bad Request"]
+    CE -->|No| VE{Validation Error}
+    VE -->|Yes| R400[400 Bad Request]
     
-    VE -->|No| R500["500 Internal Server Error"]
+    VE -->|No| R500[500 Internal Server Error]
     
     style R404 fill:#ffd43b
     style R409 fill:#ffa94d
@@ -367,12 +367,12 @@ flowchart TD
 
 | Code | Meaning | When Used |
 |------|---------|-----------|
-| 200 | OK | Successful GET, PUT, PATCH |
+| 200 | OK | Successful GET PUT PATCH |
 | 201 | Created | Successful POST |
 | 204 | No Content | Successful DELETE |
 | 400 | Bad Request | Validation errors |
-| 401 | Unauthorized | Missing/Invalid API key |
-| 404 | Not Found | Resource doesn't exist |
+| 401 | Unauthorized | Missing or Invalid API key |
+| 404 | Not Found | Resource does not exist |
 | 409 | Conflict | Duplicate email |
 | 500 | Internal Server Error | Unexpected errors |
 
@@ -393,11 +393,11 @@ flowchart TD
 
 ---
 
-## 🚀 Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
-- **Java 17** or higher
-- **Maven 3.6+**
+- Java 17 or higher
+- Maven 3.6+
 
 ### Clone Repository
 ```bash
@@ -407,24 +407,25 @@ cd REST-API-for-a-Task-Management-system
 
 ### Run Application
 ```bash
-# Using Maven
 mvn spring-boot:run
+```
 
-# Or build and run JAR
+Or build and run JAR:
+```bash
 mvn clean package
 java -jar target/task-manager-1.0.0.jar
 ```
 
 ### Access Points
-- **API Base URL**: `http://localhost:8080/api`
-- **H2 Console**: `http://localhost:8080/h2-console`
-  - JDBC URL: `jdbc:h2:mem:taskdb`
-  - Username: `sa`
-  - Password: (empty)
+- API Base URL: http://localhost:8080/api
+- H2 Console: http://localhost:8080/h2-console
+  - JDBC URL: jdbc:h2:mem:taskdb
+  - Username: sa
+  - Password: empty
 
 ---
 
-## 📝 Sample Requests
+## Sample Requests
 
 ### Create User
 ```bash
@@ -437,7 +438,7 @@ curl -X POST http://localhost:8080/api/users \
   }'
 ```
 
-**Response (201 Created)**:
+Response 201 Created:
 ```json
 {
   "id": 1,
@@ -461,7 +462,7 @@ curl -X POST http://localhost:8080/api/tasks \
   }'
 ```
 
-**Response (201 Created)**:
+Response 201 Created:
 ```json
 {
   "id": 1,
@@ -502,19 +503,19 @@ curl -X DELETE http://localhost:8080/api/tasks/1 \
 
 ---
 
-## 🎯 Design Decisions
+## Design Decisions
 
 | Decision | Rationale |
 |----------|-----------|
-| **DTOs over Entities** | Prevents entity exposure and over-posting vulnerabilities |
-| **Service Layer** | Separates business logic from controllers for testability |
-| **Global Exception Handler** | Consistent error responses across all endpoints |
-| **API Key Authentication** | Simple but effective for assignment requirements |
-| **Flyway Migrations** | Version-controlled database schema changes |
-| **H2 In-Memory DB** | Easy development setup, no external dependencies |
+| DTOs over Entities | Prevents entity exposure and over-posting vulnerabilities |
+| Service Layer | Separates business logic from controllers for testability |
+| Global Exception Handler | Consistent error responses across all endpoints |
+| API Key Authentication | Simple but effective for assignment requirements |
+| Flyway Migrations | Version-controlled database schema changes |
+| H2 In-Memory DB | Easy development setup no external dependencies |
 
 ---
 
-## 📄 License
+## License
 
-This project is for educational/assignment purposes.
+This project is for educational purposes.
